@@ -1,0 +1,33 @@
+{
+	"name": "gatsby-plugin-mdx-scheduled-publishing",
+	"version": "1.0.0",
+	"description": "Prevents MDX pages from being included until a specified publish date has passed.",
+	"license": "MIT",
+	"keywords": [
+		"gatsby",
+		"gatsby-plugin",
+		"markdown",
+		"scheduling",
+		"blog"
+	],
+	"peerDependencies": {
+		"gatsby": "^4.0.0-next"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/traviswimer/gatsby-plugin-mdx-scheduled-publishing.git"
+	},
+	"bugs": {
+		"url": "https://github.com/traviswimer/gatsby-plugin-mdx-scheduled-publishing/issues"
+	},
+	"homepage": "https://github.com/traviswimer/gatsby-plugin-mdx-scheduled-publishing",
+	"contributors": [
+		{
+			"name": "Travis Wimer",
+			"url": "https://traviswimer.com"
+		}
+	]
+}
