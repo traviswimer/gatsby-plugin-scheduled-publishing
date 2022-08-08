@@ -1,4 +1,6 @@
-function getPublishDate({ node, publishDateKey }) {
+import type { CreateNodeArgs, PluginOptions } from "gatsby";
+
+function getPublishDate({ node, publishDateKey }: any) {
 	if (!node.frontmatter) {
 		return;
 	}
@@ -7,7 +9,7 @@ function getPublishDate({ node, publishDateKey }) {
 	return !!publishDateString ? new Date(publishDateString) : undefined;
 }
 
-exports.onCreateNode = async (
+export const onCreateNode = async (
 	{
 		node,
 		loadNodeContent,
@@ -15,16 +17,16 @@ exports.onCreateNode = async (
 		createNodeId,
 		reporter,
 		createContentDigest,
-	},
-	pluginOptions
-) => {
-	const { createNode, createNodeField, createParentChildLink } = actions;
+	}: CreateNodeArgs,
+	pluginOptions: PluginOptions
+): Promise<void> => {
+	const { createNode, createNodeField } = actions;
 	const { publishDateKey = "publishDate" } = pluginOptions;
 
 	const publishDate = getPublishDate({ node, publishDateKey });
 
 	if (!publishDate) {
-		return {};
+		return;
 	}
 
 	const currentDate = new Date();
@@ -40,7 +42,7 @@ exports.onCreateNode = async (
 	// Creates queryable nodes of both Published and Unpublished mdx files
 	const content = await loadNodeContent(node);
 
-	const scheduledPublishingNode = {
+	const scheduledPublishingNode: any = {
 		id: createNodeId(`${node.id} >>> MdxScheduledPublishing`),
 		internal: {
 			content,

@@ -6,3 +6,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# built files
+/*.js
+/*.js.map
+/*.d.ts

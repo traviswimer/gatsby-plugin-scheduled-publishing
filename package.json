@@ -14,7 +14,12 @@
 		"gatsby": "^4.0.0-next"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "tsc --project .",
+		"typecheck": "tsc --project . --noEmit",
+		"start": "tsc --project . -w",
+		"test": "jest --coverage --watchAll",
+		"ci_test": "jest --coverage --ci",
+		"prepublishOnly": "yarn build"
 	},
 	"repository": {
 		"type": "git",
@@ -29,5 +34,14 @@
 			"name": "Travis Wimer",
 			"url": "https://traviswimer.com"
 		}
-	]
+	],
+	"devDependencies": {
+		"@types/jest": "^28.1.6",
+		"@types/node": "^18.6.4",
+		"gatsby": "^4.20.0",
+		"jest": "^28.1.3",
+		"ts-jest": "^28.0.7",
+		"ts-node": "^10.9.1",
+		"typescript": "^4.7.4"
+	}
 }
