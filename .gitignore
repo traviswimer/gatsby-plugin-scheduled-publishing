@@ -11,6 +11,4 @@ yarn-error.log*
 /coverage
 
 # built files
-/*.js
-/*.js.map
-/*.d.ts
+/build

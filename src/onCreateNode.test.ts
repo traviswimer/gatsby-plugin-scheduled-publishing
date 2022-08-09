@@ -1,6 +1,6 @@
 import type { GatsbyNode } from "gatsby";
 import { DateTime } from "luxon";
-import { onCreateNode, NO_PUBLISH_DATE_KEY_PROVIDED } from "./gatsby-node";
+import onCreateNode, { NO_PUBLISH_DATE_KEY_PROVIDED } from "./onCreateNode";
 
 test(`doesn't create node when no date is found`, async () => {
 	const date = "2022-01-30";
@@ -96,7 +96,7 @@ test(`creates node field and node when key and value are valid`, async () => {
 	const first_call = jest.mocked(params.actions.createNode).mock.calls[0][0];
 	expect(first_call.id).toContain(`${node.id} >>>`);
 	expect(first_call.internal).toBeDefined();
-	expect(first_call.mdx___NODE).toEqual(node.id);
+	expect(first_call.node___NODE).toEqual(node.id);
 });
 
 test(`creates unpublished node field and node when date is later than the current date`, async () => {
@@ -134,5 +134,5 @@ test(`creates unpublished node field and node when date is later than the curren
 	const first_call = jest.mocked(params.actions.createNode).mock.calls[0][0];
 	expect(first_call.id).toContain(`${node.id} >>>`);
 	expect(first_call.internal).toBeDefined();
-	expect(first_call.mdx___NODE).toEqual(node.id);
+	expect(first_call.node___NODE).toEqual(node.id);
 });

@@ -10,7 +10,7 @@ export interface LocalPluginOptions {
 	delayInMinutes?: number;
 }
 
-export const onCreateNode = async (
+const onCreateNode = async (
 	{
 		node,
 		loadNodeContent,
@@ -46,23 +46,23 @@ export const onCreateNode = async (
 	const currentDate = DateTime.now();
 	const isPublished = publishDate.toMillis() <= currentDate.toMillis();
 
-	// Adds an "isPublished" field to the original MDX node
+	// Adds an "isPublished" field to the original node
 	createNodeField({
 		node,
 		name: `isPublished`,
 		value: isPublished,
 	});
 
-	// Creates queryable nodes of both Published and Unpublished mdx files
+	// Creates queryable nodes of both Published and Unpublished files
 	const content = await loadNodeContent(node);
 
 	const scheduledPublishingNode: any = {
-		id: createNodeId(`${node.id} >>> MdxScheduledPublishing`),
+		id: createNodeId(`${node.id} >>> ScheduledPublishing`),
 		internal: {
 			content,
-			type: isPublished ? `MdxPublished` : `MdxUnpublished`,
+			type: isPublished ? `Published` : `Unpublished`,
 		},
-		mdx___NODE: node.id,
+		node___NODE: node.id,
 	};
 
 	scheduledPublishingNode.internal.contentDigest = createContentDigest(
@@ -71,3 +71,5 @@ export const onCreateNode = async (
 
 	createNode(scheduledPublishingNode);
 };
+
+export default onCreateNode;
