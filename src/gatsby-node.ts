@@ -1,12 +1,10 @@
-import type { CreateNodeArgs, PluginOptions } from "gatsby";
+import getPublishDate from "./getPublishDate";
+import { DateTime } from "luxon";
 
-function getPublishDate({ node, publishDateKey }: any) {
-	if (!node.frontmatter) {
-		return;
-	}
-	const publishDateString = node.frontmatter[publishDateKey];
+export const NO_PUBLISH_DATE_KEY_PROVIDED = `Invalid "publishDateKey" provided in plugin options.`;
 
-	return !!publishDateString ? new Date(publishDateString) : undefined;
+export interface LocalPluginOptions {
+	publishDateKey: string;
 }
 
 export const onCreateNode = async (
@@ -17,20 +15,25 @@ export const onCreateNode = async (
 		createNodeId,
 		reporter,
 		createContentDigest,
-	}: CreateNodeArgs,
-	pluginOptions: PluginOptions
+	}: any,
+	pluginOptions: LocalPluginOptions
 ): Promise<void> => {
 	const { createNode, createNodeField } = actions;
-	const { publishDateKey = "publishDate" } = pluginOptions;
+	const { publishDateKey } = pluginOptions;
 
-	const publishDate = getPublishDate({ node, publishDateKey });
+	if (!publishDateKey) {
+		reporter.panicOnBuild(NO_PUBLISH_DATE_KEY_PROVIDED);
+		return;
+	}
+
+	const publishDate = getPublishDate({ node, publishDateKey, reporter });
 
 	if (!publishDate) {
 		return;
 	}
 
-	const currentDate = new Date();
-	const isPublished = publishDate <= currentDate;
+	const currentDate = DateTime.now();
+	const isPublished = publishDate.toMillis() <= currentDate.toMillis();
 
 	// Adds an "isPublished" field to the original MDX node
 	createNodeField({
