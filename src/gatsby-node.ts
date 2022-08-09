@@ -5,6 +5,9 @@ export const NO_PUBLISH_DATE_KEY_PROVIDED = `Invalid "publishDateKey" provided i
 
 export interface LocalPluginOptions {
 	publishDateKey: string;
+	dateFormat?: string;
+	timezone?: string;
+	delayInMinutes?: number;
 }
 
 export const onCreateNode = async (
@@ -19,14 +22,22 @@ export const onCreateNode = async (
 	pluginOptions: LocalPluginOptions
 ): Promise<void> => {
 	const { createNode, createNodeField } = actions;
-	const { publishDateKey } = pluginOptions;
+	const { publishDateKey, dateFormat, timezone, delayInMinutes } =
+		pluginOptions;
 
 	if (!publishDateKey) {
 		reporter.panicOnBuild(NO_PUBLISH_DATE_KEY_PROVIDED);
 		return;
 	}
 
-	const publishDate = getPublishDate({ node, publishDateKey, reporter });
+	const publishDate = getPublishDate({
+		node,
+		publishDateKey,
+		dateFormat,
+		timezone,
+		delayInMinutes,
+		reporter,
+	});
 
 	if (!publishDate) {
 		return;

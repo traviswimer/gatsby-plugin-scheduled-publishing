@@ -11,13 +11,12 @@ test(`returns date when valid key string is provided`, () => {
 		},
 	} as GatsbyNode<any, any>;
 	const publishDateKey = "some.random.date";
-	const result = getPublishDate({
+	const result: any = getPublishDate({
 		node,
 		publishDateKey,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
-	// @ts-ignore
 	expect(result.toString()).toEqual("2022-01-30T00:00:00.000Z");
 });
 
@@ -104,4 +103,96 @@ test(`reports error if date is invalid`, () => {
 		"Invalid date found at specified publishDateKey."
 	);
 	expect(result).toBeUndefined();
+});
+
+test(`reports warning if delayInMinutes is over 24 hours`, () => {
+	const date = "2022-01-30";
+	const node = {
+		some: {
+			random: {
+				date,
+			},
+		},
+	} as GatsbyNode<any, any>;
+	const publishDateKey = "some.random.date";
+
+	const params = {
+		node,
+		publishDateKey,
+		delayInMinutes: 60 * 25,
+		reporter: { warn: jest.fn() },
+	} as any;
+
+	const result = getPublishDate(params);
+
+	expect(jest.mocked(params.reporter.warn).mock.calls[0][0]).toContain(
+		`"delayInMinutes" plugin option is`
+	);
+	expect(result).not.toBeUndefined();
+});
+
+test(`correctly adjusts for timezones`, () => {
+	const date = "2022-01-30";
+	const node = {
+		some: {
+			random: {
+				date,
+			},
+		},
+	} as GatsbyNode<any, any>;
+	const publishDateKey = "some.random.date";
+
+	const params = {
+		node,
+		publishDateKey,
+		timezone: "America/New_York",
+	} as any;
+
+	const result: any = getPublishDate(params);
+
+	expect(result.toString()).toEqual("2022-01-30T00:00:00.000-05:00");
+});
+
+test(`correctly adjusts for delayInMinutes`, () => {
+	const date = "2022-01-30";
+	const node = {
+		some: {
+			random: {
+				date,
+			},
+		},
+	} as GatsbyNode<any, any>;
+	const publishDateKey = "some.random.date";
+
+	const params = {
+		node,
+		publishDateKey,
+		delayInMinutes: 60 * 5 + 45,
+	} as any;
+
+	const result: any = getPublishDate(params);
+
+	expect(result.toString()).toEqual("2022-01-30T05:45:00.000Z");
+});
+
+test(`accepts different date formats`, () => {
+	const date = "2022-22-01";
+	const node = {
+		some: {
+			random: {
+				date,
+			},
+		},
+	} as GatsbyNode<any, any>;
+	const publishDateKey = "some.random.date";
+
+	const params = {
+		node,
+		publishDateKey,
+		dateFormat: "yyyy-dd-MM",
+	} as any;
+
+	const result: any = getPublishDate(params);
+
+	expect(result.toString()).toEqual("2022-01-22T00:00:00.000Z");
 });
