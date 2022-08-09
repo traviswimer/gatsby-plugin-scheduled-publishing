@@ -4,7 +4,7 @@ import type { Reporter, GatsbyNode } from "gatsby";
 
 export interface getPublishDateProps {
 	node: GatsbyNode & Record<any, any>;
-	publishDateKey: string;
+	publishDateKey: string | Function;
 	reporter: Reporter;
 	dateFormat?: string;
 	timezone?: string;
@@ -19,7 +19,13 @@ export default function getPublishDate({
 	timezone = "UTC",
 	delayInMinutes = 0,
 }: getPublishDateProps): DateTime | void {
-	const publishDateString = _.get(node, publishDateKey);
+	let publishDateString;
+	if (typeof publishDateKey === "string") {
+		publishDateString = _.get(node, publishDateKey);
+	} else if (typeof publishDateKey === "function") {
+		publishDateString = publishDateKey(node);
+	}
+
 	if (!publishDateString) {
 		// This node doesn't have the key, so we can ignore it
 		return;

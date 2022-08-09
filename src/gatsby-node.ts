@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 export const NO_PUBLISH_DATE_KEY_PROVIDED = `Invalid "publishDateKey" provided in plugin options.`;
 
 export interface LocalPluginOptions {
-	publishDateKey: string;
+	publishDateKey: string | Function;
 	dateFormat?: string;
 	timezone?: string;
 	delayInMinutes?: number;

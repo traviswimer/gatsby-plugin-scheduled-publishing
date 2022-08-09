@@ -20,6 +20,27 @@ test(`returns date when valid key string is provided`, () => {
 	expect(result.toString()).toEqual("2022-01-30T00:00:00.000Z");
 });
 
+test(`returns date when valid key function is provided`, () => {
+	const date = "2022-01-30";
+	const node = {
+		some: {
+			random: {
+				date,
+			},
+		},
+	} as GatsbyNode<any, any>;
+	const publishDateKey = (node) => {
+		return node.some.random.date;
+	};
+	const result: any = getPublishDate({
+		node,
+		publishDateKey,
+		reporter: { panicOnBuild: jest.fn() },
+	} as any);
+
+	expect(result.toString()).toEqual("2022-01-30T00:00:00.000Z");
+});
+
 test(`returns undefined when invalid key string is provided`, () => {
 	const date = "2022-01-30";
 	const node = {
@@ -30,6 +51,28 @@ test(`returns undefined when invalid key string is provided`, () => {
 		},
 	} as GatsbyNode<any, any>;
 	const publishDateKey = "an.invalid.key";
+
+	const result = getPublishDate({
+		node,
+		publishDateKey,
+		reporter: { panicOnBuild: jest.fn() },
+	} as any);
+
+	expect(result).toBeUndefined();
+});
+
+test(`returns undefined when invalid key type is provided`, () => {
+	const date = "2022-01-30";
+	const node = {
+		some: {
+			random: {
+				date,
+			},
+		},
+	} as GatsbyNode<any, any>;
+
+	// this isn't a string or a function and should fail
+	const publishDateKey = 123456;
 
 	const result = getPublishDate({
 		node,
