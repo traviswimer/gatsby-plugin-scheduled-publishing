@@ -14,7 +14,7 @@ test(`doesn't create node when no date is found`, async () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "an.invalid.key";
+	const publishDate = "an.invalid.key";
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -27,13 +27,13 @@ test(`doesn't create node when no date is found`, async () => {
 		createContentDigest: jest.fn(),
 	};
 	await onCreateNode(params, {
-		publishDateKey,
+		publishDate,
 	});
 	expect(params.actions.createNodeField).not.toHaveBeenCalled();
 	expect(params.actions.createNode).not.toHaveBeenCalled();
 });
 
-test(`reports error when no "publishDateKey" is provided`, async () => {
+test(`reports error when no "publishDate" is provided`, async () => {
 	const date = "2022-01-30";
 	const node = {
 		some: {
@@ -42,7 +42,7 @@ test(`reports error when no "publishDateKey" is provided`, async () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey: any = undefined;
+	const publishDate: any = undefined;
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -55,7 +55,7 @@ test(`reports error when no "publishDateKey" is provided`, async () => {
 		createContentDigest: jest.fn(),
 	};
 	await onCreateNode(params, {
-		publishDateKey,
+		publishDate,
 	});
 	expect(jest.mocked(params.reporter.panicOnBuild).mock.calls[0][0]).toEqual(
 		NO_PUBLISH_DATE_KEY_PROVIDED
@@ -74,7 +74,7 @@ test(`creates node field and node when key and value are valid`, async () => {
 			},
 		},
 	} as any;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -88,7 +88,7 @@ test(`creates node field and node when key and value are valid`, async () => {
 	};
 	params.createNodeId.mockImplementation((id) => id);
 	await onCreateNode(params, {
-		publishDateKey,
+		publishDate,
 	});
 	expect(params.actions.createNodeField).toHaveBeenCalledWith({
 		node,
@@ -118,7 +118,7 @@ test(`creates unpublished node field and node when date is later than the curren
 			},
 		},
 	} as any;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -132,7 +132,7 @@ test(`creates unpublished node field and node when date is later than the curren
 	};
 	params.createNodeId.mockImplementation((id) => id);
 	await onCreateNode(params, {
-		publishDateKey,
+		publishDate,
 	});
 	expect(params.actions.createNodeField).toHaveBeenCalledWith({
 		node,
@@ -162,7 +162,7 @@ test(`sets publishGroup`, async () => {
 			},
 		},
 	} as any;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -178,7 +178,7 @@ test(`sets publishGroup`, async () => {
 
 	const groupName = "test_group";
 	await onCreateNode(params, {
-		publishDateKey,
+		publishDate,
 		group: groupName,
 	});
 	expect(params.actions.createNodeField).toHaveBeenCalledWith({

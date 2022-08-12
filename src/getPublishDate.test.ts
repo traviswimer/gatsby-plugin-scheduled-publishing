@@ -10,10 +10,10 @@ test(`returns date when valid key string is provided`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 	const result: any = getPublishDate({
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
@@ -29,12 +29,12 @@ test(`returns date when valid key function is provided`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = (node) => {
+	const publishDate = (node) => {
 		return node.some.random.date;
 	};
 	const result: any = getPublishDate({
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
@@ -50,11 +50,11 @@ test(`returns undefined when invalid key string is provided`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "an.invalid.key";
+	const publishDate = "an.invalid.key";
 
 	const result = getPublishDate({
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
@@ -72,11 +72,11 @@ test(`returns undefined when invalid key type is provided`, () => {
 	} as GatsbyNode<any, any>;
 
 	// this isn't a string or a function and should fail
-	const publishDateKey = 123456;
+	const publishDate = 123456;
 
 	const result = getPublishDate({
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
@@ -92,11 +92,11 @@ test(`returns undefined when key exists but Date is null`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const result = getPublishDate({
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
@@ -112,11 +112,11 @@ test(`returns undefined when empty string is provided`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const result = getPublishDate({
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any);
 
@@ -132,18 +132,18 @@ test(`reports error if date is invalid`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const params = {
 		node,
-		publishDateKey,
+		publishDate,
 		reporter: { panicOnBuild: jest.fn() },
 	} as any;
 
 	const result = getPublishDate(params);
 
 	expect(jest.mocked(params.reporter.panicOnBuild).mock.calls[0][0]).toContain(
-		"Invalid date found at specified publishDateKey."
+		"Invalid date found at specified publishDate."
 	);
 	expect(result).toBeUndefined();
 });
@@ -157,11 +157,11 @@ test(`reports warning if delayInMinutes is over 24 hours`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const params = {
 		node,
-		publishDateKey,
+		publishDate,
 		delayInMinutes: 60 * 25,
 		reporter: { warn: jest.fn() },
 	} as any;
@@ -183,11 +183,11 @@ test(`correctly adjusts for timezones`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const params = {
 		node,
-		publishDateKey,
+		publishDate,
 		timezone: "America/New_York",
 	} as any;
 
@@ -205,11 +205,11 @@ test(`correctly adjusts for delayInMinutes`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const params = {
 		node,
-		publishDateKey,
+		publishDate,
 		delayInMinutes: 60 * 5 + 45,
 	} as any;
 
@@ -227,11 +227,11 @@ test(`accepts different date formats`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDateKey = "some.random.date";
+	const publishDate = "some.random.date";
 
 	const params = {
 		node,
-		publishDateKey,
+		publishDate,
 		dateFormat: "yyyy-dd-MM",
 	} as any;
 

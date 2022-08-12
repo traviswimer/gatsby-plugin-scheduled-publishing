@@ -4,7 +4,7 @@ import type { Reporter, GatsbyNode } from "gatsby";
 
 export interface getPublishDateProps {
 	node: GatsbyNode & Record<any, any>;
-	publishDateKey: string | Function;
+	publishDate: string | Function;
 	reporter: Reporter;
 	dateFormat?: string;
 	timezone?: string;
@@ -13,20 +13,20 @@ export interface getPublishDateProps {
 
 export default function getPublishDate({
 	node,
-	publishDateKey,
+	publishDate,
 	reporter,
 	dateFormat = "yyyy-MM-dd",
 	timezone = "UTC",
 	delayInMinutes = 0,
 }: getPublishDateProps): DateTime | void {
-	let publishDateString;
-	if (typeof publishDateKey === "string") {
-		publishDateString = _.get(node, publishDateKey);
-	} else if (typeof publishDateKey === "function") {
-		publishDateString = publishDateKey(node);
+	let retrievedDateString;
+	if (typeof publishDate === "string") {
+		retrievedDateString = _.get(node, publishDate);
+	} else if (typeof publishDate === "function") {
+		retrievedDateString = publishDate(node);
 	}
 
-	if (!publishDateString) {
+	if (!retrievedDateString) {
 		// This node doesn't have the key, so we can ignore it
 		return;
 	}
@@ -40,14 +40,14 @@ export default function getPublishDate({
 		);
 	}
 
-	let publishDate;
+	let retrievedDate;
 	try {
-		publishDate = DateTime.fromFormat(publishDateString, dateFormat, {
+		retrievedDate = DateTime.fromFormat(retrievedDateString, dateFormat, {
 			zone: timezone,
 		}).plus({ minutes: delayInMinutes });
 	} catch (err) {
 		reporter.panicOnBuild(
-			`Invalid date found at specified publishDateKey. Found value "${publishDateString}" at "${publishDateKey}" on the following node:\n${JSON.stringify(
+			`Invalid date found at specified publishDate. Found value "${retrievedDateString}" at "${retrievedDate}" on the following node:\n${JSON.stringify(
 				node,
 				undefined,
 				"\t"
@@ -56,5 +56,5 @@ export default function getPublishDate({
 		return;
 	}
 
-	return publishDate;
+	return retrievedDate;
 }
