@@ -1,24 +1,5 @@
-import type { Reporter, GatsbyNode } from "gatsby";
+import type { GatsbyNode } from "gatsby";
 import getPublishDate from "./getPublishDate";
-
-test(`returns date when valid key string is provided`, () => {
-	const date = "2022-01-30";
-	const node = {
-		some: {
-			random: {
-				date,
-			},
-		},
-	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
-	const result: any = getPublishDate({
-		node,
-		publishDate,
-		reporter: { panicOnBuild: jest.fn() },
-	} as any);
-
-	expect(result.toString()).toEqual("2022-01-30T00:00:00.000Z");
-});
 
 test(`returns date when valid key function is provided`, () => {
 	const date = "2022-01-30";
@@ -50,7 +31,7 @@ test(`returns undefined when invalid key string is provided`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "an.invalid.key";
+	const publishDate = (node) => node.an?.invalid?.key;
 
 	const result = getPublishDate({
 		node,
@@ -71,8 +52,8 @@ test(`returns undefined when invalid key type is provided`, () => {
 		},
 	} as GatsbyNode<any, any>;
 
-	// this isn't a string or a function and should fail
-	const publishDate = 123456;
+	// this isn't a function and should fail
+	const publishDate = "not a function";
 
 	const result = getPublishDate({
 		node,
@@ -92,7 +73,7 @@ test(`returns undefined when key exists but Date is null`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const result = getPublishDate({
 		node,
@@ -112,7 +93,7 @@ test(`returns undefined when empty string is provided`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const result = getPublishDate({
 		node,
@@ -132,7 +113,7 @@ test(`reports error if date is invalid`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const params = {
 		node,
@@ -157,7 +138,7 @@ test(`reports warning if delayInMinutes is over 24 hours`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const params = {
 		node,
@@ -183,7 +164,7 @@ test(`correctly adjusts for timezones`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const params = {
 		node,
@@ -205,7 +186,7 @@ test(`correctly adjusts for delayInMinutes`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const params = {
 		node,
@@ -227,7 +208,7 @@ test(`accepts different date formats`, () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 
 	const params = {
 		node,

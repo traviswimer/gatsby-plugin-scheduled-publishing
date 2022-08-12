@@ -14,7 +14,7 @@ test(`doesn't create node when no date is found`, async () => {
 			},
 		},
 	} as GatsbyNode<any, any>;
-	const publishDate = "an.invalid.key";
+	const publishDate = (node) => node.an?.invalid?.key;
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -74,7 +74,7 @@ test(`creates node field and node when key and value are valid`, async () => {
 			},
 		},
 	} as any;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -118,7 +118,7 @@ test(`creates unpublished node field and node when date is later than the curren
 			},
 		},
 	} as any;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),
@@ -162,7 +162,7 @@ test(`sets publishGroup`, async () => {
 			},
 		},
 	} as any;
-	const publishDate = "some.random.date";
+	const publishDate = (node) => node.some?.random?.date;
 	const params = {
 		node,
 		loadNodeContent: jest.fn(),

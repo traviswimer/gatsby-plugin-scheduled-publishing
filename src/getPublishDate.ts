@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { DateTime } from "luxon";
 import type { Reporter, GatsbyNode } from "gatsby";
 
@@ -20,9 +19,7 @@ export default function getPublishDate({
 	delayInMinutes = 0,
 }: getPublishDateProps): DateTime | void {
 	let retrievedDateString;
-	if (typeof publishDate === "string") {
-		retrievedDateString = _.get(node, publishDate);
-	} else if (typeof publishDate === "function") {
+	if (typeof publishDate === "function") {
 		retrievedDateString = publishDate(node);
 	}
 

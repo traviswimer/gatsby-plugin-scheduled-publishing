@@ -5,7 +5,7 @@ export const NO_PUBLISH_DATE_KEY_PROVIDED = `Invalid "publishDate" provided in p
 export const DEFAULT_GROUP_NAME = "UNGROUPED";
 
 export interface LocalPluginOptions {
-	publishDate: string | Function;
+	publishDate: Function;
 	group?: string;
 	dateFormat?: string;
 	timezone?: string;
