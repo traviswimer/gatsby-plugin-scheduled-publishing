@@ -2,9 +2,11 @@ import getPublishDate from "./getPublishDate";
 import { DateTime } from "luxon";
 
 export const NO_PUBLISH_DATE_KEY_PROVIDED = `Invalid "publishDateKey" provided in plugin options.`;
+export const DEFAULT_GROUP_NAME = "UNGROUPED";
 
 export interface LocalPluginOptions {
 	publishDateKey: string | Function;
+	group?: string;
 	dateFormat?: string;
 	timezone?: string;
 	delayInMinutes?: number;
@@ -22,8 +24,10 @@ const onCreateNode = async (
 	pluginOptions: LocalPluginOptions
 ): Promise<void> => {
 	const { createNode, createNodeField } = actions;
-	const { publishDateKey, dateFormat, timezone, delayInMinutes } =
+	const { group, publishDateKey, dateFormat, timezone, delayInMinutes } =
 		pluginOptions;
+
+	const publishGroup = group || DEFAULT_GROUP_NAME;
 
 	if (!publishDateKey) {
 		reporter.panicOnBuild(NO_PUBLISH_DATE_KEY_PROVIDED);
@@ -52,12 +56,18 @@ const onCreateNode = async (
 		name: `isPublished`,
 		value: isPublished,
 	});
+	createNodeField({
+		node,
+		name: `publishGroup`,
+		value: publishGroup,
+	});
 
 	// Creates queryable nodes of both Published and Unpublished files
 	const content = await loadNodeContent(node);
 
 	const scheduledPublishingNode: any = {
 		id: createNodeId(`${node.id} >>> ScheduledPublishing`),
+		publishGroup,
 		internal: {
 			content,
 			type: isPublished ? `Published` : `Unpublished`,
