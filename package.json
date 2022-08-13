@@ -1,14 +1,15 @@
 {
-	"name": "gatsby-plugin-mdx-scheduled-publishing",
+	"name": "gatsby-plugin-scheduled-publishing",
 	"version": "1.0.0",
-	"description": "Prevents MDX pages from being included until a specified publish date has passed.",
+	"description": "Auto-publish content by committing publish dates to your repo.",
 	"license": "MIT",
 	"keywords": [
 		"gatsby",
 		"gatsby-plugin",
-		"markdown",
 		"scheduling",
-		"blog"
+		"blog",
+		"publish",
+		"dates"
 	],
 	"peerDependencies": {
 		"gatsby": "^4.0.0-next"
@@ -23,12 +24,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/traviswimer/gatsby-plugin-mdx-scheduled-publishing.git"
+		"url": "https://github.com/traviswimer/gatsby-plugin-scheduled-publishing.git"
 	},
 	"bugs": {
-		"url": "https://github.com/traviswimer/gatsby-plugin-mdx-scheduled-publishing/issues"
+		"url": "https://github.com/traviswimer/gatsby-plugin-scheduled-publishing/issues"
 	},
-	"homepage": "https://github.com/traviswimer/gatsby-plugin-mdx-scheduled-publishing",
+	"homepage": "https://github.com/traviswimer/gatsby-plugin-scheduled-publishing",
 	"contributors": [
 		{
 			"name": "Travis Wimer",
@@ -50,7 +51,6 @@
 		"typescript": "^4.7.4"
 	},
 	"dependencies": {
-		"lodash": "^4.17.21",
 		"luxon": "^3.0.1"
 	}
 }
