@@ -12,17 +12,10 @@ export interface LocalPluginOptions {
 	delayInMinutes?: number;
 }
 
-const onCreateNode = async (
-	{
-		node,
-		loadNodeContent,
-		actions,
-		createNodeId,
-		reporter,
-		createContentDigest,
-	}: any,
+export default async function createPublishedAndUnpublishedNodes(
+	{ node, actions, createNodeId, reporter, createContentDigest }: any,
 	pluginOptions: LocalPluginOptions
-): Promise<void> => {
+): Promise<void> {
 	const { createNode, createNodeField } = actions;
 	const { group, publishDate, dateFormat, timezone, delayInMinutes } =
 		pluginOptions;
@@ -51,35 +44,30 @@ const onCreateNode = async (
 	const isPublished = retrievedDate.toMillis() <= currentDate.toMillis();
 
 	// Adds an "isPublished" field to the original node
-	createNodeField({
+	await createNodeField({
 		node,
 		name: `isPublished`,
 		value: isPublished,
 	});
-	createNodeField({
+	await createNodeField({
 		node,
 		name: `publishGroup`,
 		value: publishGroup,
 	});
 
 	// Creates queryable nodes of both Published and Unpublished files
-	const content = await loadNodeContent(node);
-
 	const scheduledPublishingNode: any = {
 		id: createNodeId(`${node.id} >>> ScheduledPublishing`),
 		publishGroup,
 		internal: {
-			content,
 			type: isPublished ? `Published` : `Unpublished`,
 		},
 		node___NODE: node.id,
 	};
 
 	scheduledPublishingNode.internal.contentDigest = createContentDigest(
-		scheduledPublishingNode
+		scheduledPublishingNode.id
 	);
 
-	createNode(scheduledPublishingNode);
-};
-
-export default onCreateNode;
+	await createNode(scheduledPublishingNode);
+}

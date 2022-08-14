@@ -1,9 +1,9 @@
 import type { GatsbyNode } from "gatsby";
 import { DateTime } from "luxon";
-import onCreateNode, {
+import createPublishedAndUnpublishedNodes, {
 	NO_PUBLISH_DATE_KEY_PROVIDED,
 	DEFAULT_GROUP_NAME,
-} from "./onCreateNode";
+} from "./createPublishedAndUnpublishedNodes";
 
 test(`doesn't create node when no date is found`, async () => {
 	const date = "2022-01-30";
@@ -15,7 +15,7 @@ test(`doesn't create node when no date is found`, async () => {
 		},
 	} as GatsbyNode<any, any>;
 	const publishDate = (node) => node.an?.invalid?.key;
-	const params = {
+	const params: any = {
 		node,
 		loadNodeContent: jest.fn(),
 		actions: {
@@ -26,7 +26,7 @@ test(`doesn't create node when no date is found`, async () => {
 		reporter: {},
 		createContentDigest: jest.fn(),
 	};
-	await onCreateNode(params, {
+	await createPublishedAndUnpublishedNodes(params, {
 		publishDate,
 	});
 	expect(params.actions.createNodeField).not.toHaveBeenCalled();
@@ -43,7 +43,7 @@ test(`reports error when no "publishDate" is provided`, async () => {
 		},
 	} as GatsbyNode<any, any>;
 	const publishDate: any = undefined;
-	const params = {
+	const params: any = {
 		node,
 		loadNodeContent: jest.fn(),
 		actions: {
@@ -54,7 +54,7 @@ test(`reports error when no "publishDate" is provided`, async () => {
 		reporter: { panicOnBuild: jest.fn() },
 		createContentDigest: jest.fn(),
 	};
-	await onCreateNode(params, {
+	await createPublishedAndUnpublishedNodes(params, {
 		publishDate,
 	});
 	expect(jest.mocked(params.reporter.panicOnBuild).mock.calls[0][0]).toEqual(
@@ -75,7 +75,7 @@ test(`creates node field and node when key and value are valid`, async () => {
 		},
 	} as any;
 	const publishDate = (node) => node.some?.random?.date;
-	const params = {
+	const params: any = {
 		node,
 		loadNodeContent: jest.fn(),
 		actions: {
@@ -87,7 +87,7 @@ test(`creates node field and node when key and value are valid`, async () => {
 		createContentDigest: jest.fn(),
 	};
 	params.createNodeId.mockImplementation((id) => id);
-	await onCreateNode(params, {
+	await createPublishedAndUnpublishedNodes(params, {
 		publishDate,
 	});
 	expect(params.actions.createNodeField).toHaveBeenCalledWith({
@@ -119,7 +119,7 @@ test(`creates unpublished node field and node when date is later than the curren
 		},
 	} as any;
 	const publishDate = (node) => node.some?.random?.date;
-	const params = {
+	const params: any = {
 		node,
 		loadNodeContent: jest.fn(),
 		actions: {
@@ -131,7 +131,7 @@ test(`creates unpublished node field and node when date is later than the curren
 		createContentDigest: jest.fn(),
 	};
 	params.createNodeId.mockImplementation((id) => id);
-	await onCreateNode(params, {
+	await createPublishedAndUnpublishedNodes(params, {
 		publishDate,
 	});
 	expect(params.actions.createNodeField).toHaveBeenCalledWith({
@@ -163,7 +163,7 @@ test(`sets publishGroup`, async () => {
 		},
 	} as any;
 	const publishDate = (node) => node.some?.random?.date;
-	const params = {
+	const params: any = {
 		node,
 		loadNodeContent: jest.fn(),
 		actions: {
@@ -177,7 +177,7 @@ test(`sets publishGroup`, async () => {
 	params.createNodeId.mockImplementation((id) => id);
 
 	const groupName = "test_group";
-	await onCreateNode(params, {
+	await createPublishedAndUnpublishedNodes(params, {
 		publishDate,
 		group: groupName,
 	});
