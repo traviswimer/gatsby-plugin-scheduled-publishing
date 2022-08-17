@@ -14,7 +14,7 @@ export default function getPublishDate({
 	node,
 	publishDate,
 	reporter,
-	dateFormat = "yyyy-MM-dd",
+	dateFormat,
 	timezone = "UTC",
 	delayInMinutes = 0,
 }: getPublishDateProps): DateTime | void {
@@ -37,12 +37,17 @@ export default function getPublishDate({
 		);
 	}
 
-	let retrievedDate;
-	try {
+	let retrievedDate: DateTime;
+	if (dateFormat) {
 		retrievedDate = DateTime.fromFormat(retrievedDateString, dateFormat, {
 			zone: timezone,
 		}).plus({ minutes: delayInMinutes });
-	} catch (err) {
+	} else {
+		retrievedDate = DateTime.fromISO(retrievedDateString, {
+			zone: timezone,
+		}).plus({ minutes: delayInMinutes });
+	}
+	if (!retrievedDate.isValid) {
 		reporter.panicOnBuild(
 			`Invalid date found at specified publishDate. Found value "${retrievedDateString}" at "${retrievedDate}" on the following node:\n${JSON.stringify(
 				node,

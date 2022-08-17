@@ -105,7 +105,7 @@ test(`returns undefined when empty string is provided`, () => {
 });
 
 test(`reports error if date is invalid`, () => {
-	const date = 9238423788;
+	const date = () => {};
 	const node = {
 		some: {
 			random: {

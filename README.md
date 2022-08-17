@@ -1,9 +1,14 @@
+<p align="center">
+  <img alt="gatsby-plugin-scheduled-publishing" src="https://raw.githubusercontent.com/traviswimer/gatsby-plugin-scheduled-publishing/main/gatsby-plugin-scheduled-publishing-logo.png" width="400" />
+</p>
+
 > `gatsby-plugin-scheduled-publishing` helps you auto-publish content without requiring a "data source".
 
 - [Learn about the problems this plugin solves.](#problem-explanation)
 - [Getting Started](#getting-started)
+- [Read Blog Post tutorial on using this plugin to automatically publish content](https://traviswimer.com/blog/auto-publish-gatsby-blog-using-github-actions)
+- [API reference](#api)
 - [Advanced Examples](#examples)
-- [Read the API reference](#api)
 
 <h2 id="problem-explanation">What problems does this solve?</h2>
 
@@ -16,6 +21,8 @@ This plugin allows you to simply commit the scheduled date to your repo instead.
 **Triggering the build**
 
 This plugin only affects what is included in a build. How you generate a new build will depend on your setup.
+
+To get a better idea, you can read this blog post: [How To Auto-publish Gatsby Blog using Github Actions](https://traviswimer.com/blog/auto-publish-gatsby-blog-using-github-actions).
 
 <h2 id="getting-started">Getting Started</h2>
 
@@ -153,11 +160,29 @@ const config = {
 
 In this example, the year, month, and day are all separate properties on the `Node`, so the function returns a string that combines them all together. If any of them are not defined, it will return `undefined`, and the `Node` will not be included.
 
-`dateFormat`: _string_ - _optional_ (Default: `"yyyy-MM-dd"`)
+`dateFormat`: _string_ - _optional_
 
-This is the date format that will be expected when a date is found with `publishDate`. By default, it is expected that you will pass a date formatted like this: `2022-05-30`
+This is the date format that will be expected when a date is found with `publishDate`.
+
+If this options is not provided, it will expect dates to be in [ISO format](https://www.w3.org/QA/Tips/iso-date) (e.g. `yyyy-MM-dd`).
 
 This plugin uses a library called [Luxon](https://moment.github.io/luxon/#/) to work with dates. You can find all supported date format options in [Luxon's date format documentation](https://moment.github.io/luxon/#/parsing?id=table-of-tokens).
+
+Example:
+
+```javascript
+const config = {
+	plugins: [
+		{
+			resolve: `gatsby-plugin-scheduled-publishing`,
+			options: {
+				publishDate: (node) => node.frontmatter?.date;
+				dateFormat: "yyyy-dd-MM"
+			},
+		},
+	],
+};
+```
 
 `timezone`: _string_ - _optional_ (Default: `"UTC"`)
 
@@ -218,6 +243,12 @@ export const query = graphql`
 `;
 ```
 
+## How to contribute
+
+Open an issue for bug reports, feature requests, etc.
+
+Pull requests are appreciated, but it should be discussed in an issue first.
+
 ## How to run tests
 
 ```shell
@@ -245,12 +276,6 @@ Then run this command inside your gatsby project:
 ```shell
 yarn link gatsby-plugin-scheduled-publishing
 ```
-
-## How to contribute
-
-Open an issue for bug reports, feature requests, etc.
-
-Pull requests are appreciated, but it should be discussed in an issue first.
 
 ## Project Links
 
