@@ -1,6 +1,6 @@
 {
 	"name": "gatsby-plugin-scheduled-publishing",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Auto-publish content to a Gatsby app by committing publish dates to your repo.",
 	"license": "MIT",
 	"keywords": [
@@ -10,6 +10,10 @@
 		"blog",
 		"publish",
 		"dates"
+	],
+	"files": [
+		"/build/",
+		"/gatsby-node.js"
 	],
 	"peerDependencies": {
 		"gatsby": "^4.0.0-next"
