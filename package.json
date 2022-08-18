@@ -1,7 +1,7 @@
 {
 	"name": "gatsby-plugin-scheduled-publishing",
 	"version": "1.0.0",
-	"description": "Auto-publish content by committing publish dates to your repo.",
+	"description": "Auto-publish content to a Gatsby app by committing publish dates to your repo.",
 	"license": "MIT",
 	"keywords": [
 		"gatsby",
